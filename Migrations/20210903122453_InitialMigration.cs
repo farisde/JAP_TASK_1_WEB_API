@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace JAP_TASK_1_WEB_API.Migrations
 {
-    public partial class MovieModels : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -69,7 +69,7 @@ namespace JAP_TASK_1_WEB_API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<double>(type: "float", nullable: false),
-                    RatedMovieId = table.Column<int>(type: "int", nullable: true)
+                    RatedMovieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,7 +79,68 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         column: x => x.RatedMovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "CastMembers",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Carrie Fisher" },
+                    { 2, "Mark Hamil" },
+                    { 3, "Harrison Ford" },
+                    { 4, "Cole Sprouse" },
+                    { 5, "Lili Reinhart" },
+                    { 6, "Camila Mendes" },
+                    { 7, "KJ Apa" },
+                    { 8, "James Spader" },
+                    { 9, "Megan Boone" },
+                    { 10, "Diego Klattenhoff" },
+                    { 11, "Henry Lennix" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Movies",
+                columns: new[] { "Id", "CoverImage", "Description", "IsMovie", "Rating", "ReleaseDate", "Title" },
+                values: new object[,]
+                {
+                    { 1, "https://kbimages1-a.akamaihd.net/538b1473-6d45-47f4-b16e-32a0a6ba7f9a/1200/1200/False/star-wars-episode-iv-a-new-hope-3.jpg", "After Princess Leia, the leader of the Rebel Alliance, is held hostage by Darth Vader, Luke and Han Solo must free her and destroy the powerful weapon created by the Galactic Empire.", true, 5.0, new DateTime(1997, 5, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Star Wars: A New Hope (Episode IV)" },
+                    { 2, "https://images.penguinrandomhouse.com/cover/9780345320223", "Darth Vader is adamant about turning Luke Skywalker to the dark side. Master Yoda trains Luke to become a Jedi Knight while his friends try to fend off the Imperial fleet.", true, 4.7999999999999998, new DateTime(1980, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), "Star Wars: The Empire Strikes Back (Episode V)" },
+                    { 3, "https://static.wikia.nocookie.net/riverdalearchie/images/3/3a/Season_2_Poster.jpg", "Archie, Betty, Jughead and Veronica tackle being teenagers in a town that is rife with sinister happenings and blood-thirsty criminals.", false, 4.5, new DateTime(2017, 1, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), "Riverdale" },
+                    { 4, "https://static.wikia.nocookie.net/blacklist/images/5/57/Season_7_Poster.jpg", "A wanted fugitive mysteriously surrenders himself to the FBI and offers to help them capture deadly criminals. His sole condition is that he will work only with the new profiler, Elizabeth Keen.", false, 5.0, new DateTime(2013, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Blacklist" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Ratings",
+                columns: new[] { "Id", "RatedMovieId", "Value" },
+                values: new object[,]
+                {
+                    { 1, 1, 5.0 },
+                    { 2, 2, 4.7999999999999998 },
+                    { 3, 3, 4.5 },
+                    { 4, 4, 5.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CastMemberMovie",
+                columns: new[] { "CastId", "StarredMoviesId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 3, 1 },
+                    { 1, 2 },
+                    { 2, 2 },
+                    { 3, 2 },
+                    { 4, 3 },
+                    { 5, 3 },
+                    { 6, 3 },
+                    { 7, 3 },
+                    { 8, 4 },
+                    { 9, 4 },
+                    { 10, 4 },
+                    { 11, 4 }
                 });
 
             migrationBuilder.CreateIndex(
