@@ -7,6 +7,7 @@ using AutoMapper;
 using JAP_TASK_1_WEB_API.Data;
 using JAP_TASK_1_WEB_API.DTOs.Movie;
 using JAP_TASK_1_WEB_API.Models;
+using JAP_TASK_1_WEB_API.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace JAP_TASK_1_WEB_API.Services.MovieService
@@ -53,14 +54,43 @@ namespace JAP_TASK_1_WEB_API.Services.MovieService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetMovieDto>>> GetMovies()
+        public async Task<PagedResponse<List<GetMovieDto>>> GetMovies(PaginationQuery paginationQuery = null)
         {
-            var serviceResponse = new ServiceResponse<List<GetMovieDto>>();
+            var serviceResponse = new PagedResponse<List<GetMovieDto>>();
+            List<Movie> dbMovies = null;
+            if (paginationQuery.PageNumber == 0)
+            {
+                dbMovies = await _context.Movies
+                                .Include(m => m.RatingList)
+                                .Include(m => m.Cast)
+                                .ToListAsync();
+            }
+            else
+            {
+                dbMovies = await _context.Movies
+                                .Include(m => m.RatingList)
+                                .Include(m => m.Cast)
+                                .Take(paginationQuery.PageSize * paginationQuery.PageNumber)
+                                .ToListAsync();
+            }
 
-            var dbMovies = await _context.Movies
-                .Include(m => m.RatingList)
-                .Include(m => m.Cast)
-                .ToListAsync();
+            if (paginationQuery.PageNumber >= 1)
+            {
+                var skipAmount = (paginationQuery.PageNumber) * paginationQuery.PageSize;
+                var testMovies = await _context.Movies
+                                .Include(m => m.RatingList)
+                                .Include(m => m.Cast)
+                                .Skip(skipAmount)
+                                .Take(paginationQuery.PageSize * paginationQuery.PageNumber)
+                                .ToListAsync();
+                serviceResponse.NextPage = testMovies.Any() ? paginationQuery.PageNumber + 1 : null;
+            }
+            if (paginationQuery.PageNumber - 1 >= 1)
+            {
+                serviceResponse.PreviousPage = paginationQuery.PageNumber - 1;
+            }
+            serviceResponse.PageNumber = paginationQuery.PageNumber;
+            serviceResponse.PageSize = paginationQuery.PageSize;
 
             serviceResponse.Data = dbMovies.Select(m => _mapper.Map<GetMovieDto>(m)).ToList();
             serviceResponse.Data = SortMoviesByRating(serviceResponse.Data);
@@ -102,12 +132,15 @@ namespace JAP_TASK_1_WEB_API.Services.MovieService
                     }
                 }
             }
-            else if (query.SearchPhrase.Contains("after"))
+            else if (query.SearchPhrase.Contains("after") || query.SearchPhrase.Contains("before"))
             {
-                dbMovies = dbMovies.Where(m => m.ReleaseDate.Year > targetValue).ToList();
                 if (query.SearchPhrase.Contains("before"))
                 {
                     dbMovies = dbMovies.Where(m => m.ReleaseDate.Year < targetValue).ToList();
+                }
+                else
+                {
+                    dbMovies = dbMovies.Where(m => m.ReleaseDate.Year > targetValue).ToList();
                 }
             }
             else if (query.SearchPhrase.Contains("older"))
@@ -146,7 +179,14 @@ namespace JAP_TASK_1_WEB_API.Services.MovieService
 
         private double GetNumberFromString(string phrase)
         {
-            return Double.Parse(Regex.Match(phrase, @"\d+").Value);
+            try
+            {
+                return Double.Parse(Regex.Match(phrase, @"\d+").Value);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
         }
     }
 }
