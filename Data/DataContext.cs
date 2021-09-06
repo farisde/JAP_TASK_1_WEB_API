@@ -15,6 +15,7 @@ namespace JAP_TASK_1_WEB_API.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<CastMember> CastMembers { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -308,7 +309,7 @@ namespace JAP_TASK_1_WEB_API.Data
                 Title = "Agents of S.H.I.E.L.D.",
                 Description = "Agent Phil Coulson leads a team of highly skilled agents from the global law-enforcement organisation known as S.H.I.E.L.D. Together, they combat extraordinary and inexplicable threats.",
                 ReleaseDate = new DateTime(2013, 9, 24),
-                CoverImage = "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg/revision/latest?cb=20160913175145",
+                CoverImage = "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg",
                 Rating = 4.9,
                 IsMovie = false
             };
@@ -319,7 +320,7 @@ namespace JAP_TASK_1_WEB_API.Data
                 Title = "Years and Years",
                 Description = "An ordinary British family contends with the hopes, anxieties and joys of an uncertain future in this six-part limited series that begins in 2019 and propels the characters 15 years forward into an unstable world.",
                 ReleaseDate = new DateTime(2019, 5, 14),
-                CoverImage = "https://pics.filmaffinity.com/Years_and_Years_TV_Miniseries-178719162-large.jpg",
+                CoverImage = "https://i.pinimg.com/474x/4e/96/06/4e9606a7f386cafa7903e28e94e43627.jpg",
                 Rating = 2.7,
                 IsMovie = false
             };

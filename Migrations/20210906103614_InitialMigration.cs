@@ -39,6 +39,22 @@ namespace JAP_TASK_1_WEB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CastMemberMovie",
                 columns: table => new
                 {
@@ -69,7 +85,8 @@ namespace JAP_TASK_1_WEB_API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<double>(type: "float", nullable: false),
-                    RatedMovieId = table.Column<int>(type: "int", nullable: false)
+                    RatedMovieId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,6 +97,12 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -165,8 +188,8 @@ namespace JAP_TASK_1_WEB_API.Migrations
                     { 16, "https://lumiere-a.akamaihd.net/v1/images/p_fyc_themandalorian_19097_de619ea9.jpeg", "After the defeat of the Empire at the hands of Rebel forces, a lone bounty hunter operating in the Outer Rim, away from the dominion of the New Republic, goes on many surprising and risky adventures.", false, 4.2000000000000002, new DateTime(2019, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Mandalorian" },
                     { 17, "https://movieguise.files.wordpress.com/2016/01/potter.jpg", "Harry Potter, an eleven-year-old orphan, discovers that he is a wizard and is invited to study at Hogwarts. Even as he escapes a dreary life and enters a world of magic, he finds trouble awaiting him.", true, 4.5999999999999996, new DateTime(2001, 11, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Harry Potter and the Philosopher's Stone" },
                     { 18, "https://www.hylandcinema.com/files/hyland/movie-posters/hp-_chamber.jpg", "A house-elf warns Harry against returning to Hogwarts, but he decides to ignore it. When students and creatures at the school begin to get petrified, Harry finds himself surrounded in mystery.", true, 4.4000000000000004, new DateTime(2002, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Harry Potter and The Chamber Of Secrets" },
-                    { 20, "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg/revision/latest?cb=20160913175145", "Agent Phil Coulson leads a team of highly skilled agents from the global law-enforcement organisation known as S.H.I.E.L.D. Together, they combat extraordinary and inexplicable threats.", false, 4.9000000000000004, new DateTime(2013, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Agents of S.H.I.E.L.D." },
-                    { 21, "https://pics.filmaffinity.com/Years_and_Years_TV_Miniseries-178719162-large.jpg", "An ordinary British family contends with the hopes, anxieties and joys of an uncertain future in this six-part limited series that begins in 2019 and propels the characters 15 years forward into an unstable world.", false, 2.7000000000000002, new DateTime(2019, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Years and Years" },
+                    { 20, "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg", "Agent Phil Coulson leads a team of highly skilled agents from the global law-enforcement organisation known as S.H.I.E.L.D. Together, they combat extraordinary and inexplicable threats.", false, 4.9000000000000004, new DateTime(2013, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Agents of S.H.I.E.L.D." },
+                    { 21, "https://i.pinimg.com/474x/4e/96/06/4e9606a7f386cafa7903e28e94e43627.jpg", "An ordinary British family contends with the hopes, anxieties and joys of an uncertain future in this six-part limited series that begins in 2019 and propels the characters 15 years forward into an unstable world.", false, 2.7000000000000002, new DateTime(2019, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Years and Years" },
                     { 22, "https://m.media-amazon.com/images/M/MV5BMTg1NzUzNmQtMWI2ZC00YzdlLWI5ZTgtMGM3MjJlZTgwYTVlXkEyXkFqcGdeQXVyMTIzMzY2NDQ2._V1_FMjpg_UX1000_.jpg", "MacGyver, a contemporary hero and role model, applies his scientific knowledge to ordinary items to create a means of escape for himself and others from impending doom.", false, 3.2999999999999998, new DateTime(2016, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "MacGyver" },
                     { 23, "http://www.gstatic.com/tv/thumb/tvbanners/17114349/p17114349_b_v12_aa.jpg", "Surgical interns and their supervisors embark on a medical journey where they become part of heart-wrenching stories and make life-changing decisions in order to become the finest doctors.", false, 5.0, new DateTime(2005, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), "Grey's Anatomy" },
                     { 14, "https://www.enigma-mag.com/wp-content/uploads/2019/08/1563490297.jpg", "A criminal mastermind who goes by \"The Professor\" has a plan to pull off the biggest heist in recorded history -- to print billions of euros in the Royal Mint of Spain. To help him carry out the ambitious plan, he recruits eight people with certain abilities and who have nothing to lose.", false, 4.0, new DateTime(2017, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "La Casa De Papel" },
@@ -199,35 +222,35 @@ namespace JAP_TASK_1_WEB_API.Migrations
 
             migrationBuilder.InsertData(
                 table: "Ratings",
-                columns: new[] { "Id", "RatedMovieId", "Value" },
+                columns: new[] { "Id", "RatedMovieId", "UserId", "Value" },
                 values: new object[,]
                 {
-                    { 1, 1, 5.0 },
-                    { 24, 24, 3.0 },
-                    { 23, 23, 5.0 },
-                    { 22, 22, 3.2999999999999998 },
-                    { 21, 21, 2.7000000000000002 },
-                    { 20, 20, 4.9000000000000004 },
-                    { 19, 19, 4.0 },
-                    { 18, 18, 4.4000000000000004 },
-                    { 17, 17, 4.5999999999999996 },
-                    { 16, 16, 4.2000000000000002 },
-                    { 15, 15, 4.2999999999999998 },
-                    { 14, 14, 4.0 },
-                    { 13, 13, 3.6000000000000001 },
-                    { 12, 12, 4.9000000000000004 },
-                    { 11, 11, 4.2000000000000002 },
-                    { 10, 10, 3.7999999999999998 },
-                    { 9, 9, 3.5 },
-                    { 8, 8, 4.0 },
-                    { 7, 7, 4.9000000000000004 },
-                    { 6, 6, 4.5 },
-                    { 5, 5, 4.9000000000000004 },
-                    { 4, 4, 5.0 },
-                    { 3, 3, 4.5 },
-                    { 2, 2, 4.7999999999999998 },
-                    { 25, 25, 5.0 },
-                    { 26, 26, 4.0999999999999996 }
+                    { 1, 1, null, 5.0 },
+                    { 24, 24, null, 3.0 },
+                    { 23, 23, null, 5.0 },
+                    { 22, 22, null, 3.2999999999999998 },
+                    { 21, 21, null, 2.7000000000000002 },
+                    { 20, 20, null, 4.9000000000000004 },
+                    { 19, 19, null, 4.0 },
+                    { 18, 18, null, 4.4000000000000004 },
+                    { 17, 17, null, 4.5999999999999996 },
+                    { 16, 16, null, 4.2000000000000002 },
+                    { 15, 15, null, 4.2999999999999998 },
+                    { 14, 14, null, 4.0 },
+                    { 13, 13, null, 3.6000000000000001 },
+                    { 12, 12, null, 4.9000000000000004 },
+                    { 11, 11, null, 4.2000000000000002 },
+                    { 10, 10, null, 3.7999999999999998 },
+                    { 9, 9, null, 3.5 },
+                    { 8, 8, null, 4.0 },
+                    { 7, 7, null, 4.9000000000000004 },
+                    { 6, 6, null, 4.5 },
+                    { 5, 5, null, 4.9000000000000004 },
+                    { 4, 4, null, 5.0 },
+                    { 3, 3, null, 4.5 },
+                    { 2, 2, null, 4.7999999999999998 },
+                    { 25, 25, null, 5.0 },
+                    { 26, 26, null, 4.0999999999999996 }
                 });
 
             migrationBuilder.InsertData(
@@ -330,6 +353,11 @@ namespace JAP_TASK_1_WEB_API.Migrations
                 name: "IX_Ratings_RatedMovieId",
                 table: "Ratings",
                 column: "RatedMovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_UserId",
+                table: "Ratings",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -345,6 +373,9 @@ namespace JAP_TASK_1_WEB_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

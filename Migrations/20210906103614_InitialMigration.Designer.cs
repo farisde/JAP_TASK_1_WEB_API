@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JAP_TASK_1_WEB_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210906084441_InitialMigration")]
+    [Migration("20210906103614_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -576,7 +576,7 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         new
                         {
                             Id = 20,
-                            CoverImage = "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg/revision/latest?cb=20160913175145",
+                            CoverImage = "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg",
                             Description = "Agent Phil Coulson leads a team of highly skilled agents from the global law-enforcement organisation known as S.H.I.E.L.D. Together, they combat extraordinary and inexplicable threats.",
                             IsMovie = false,
                             Rating = 4.9000000000000004,
@@ -586,7 +586,7 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         new
                         {
                             Id = 21,
-                            CoverImage = "https://pics.filmaffinity.com/Years_and_Years_TV_Miniseries-178719162-large.jpg",
+                            CoverImage = "https://i.pinimg.com/474x/4e/96/06/4e9606a7f386cafa7903e28e94e43627.jpg",
                             Description = "An ordinary British family contends with the hopes, anxieties and joys of an uncertain future in this six-part limited series that begins in 2019 and propels the characters 15 years forward into an unstable world.",
                             IsMovie = false,
                             Rating = 2.7000000000000002,
@@ -655,12 +655,17 @@ namespace JAP_TASK_1_WEB_API.Migrations
                     b.Property<int>("RatedMovieId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Value")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RatedMovieId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
 
@@ -823,6 +828,30 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("JAP_TASK_1_WEB_API.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("CastMemberMovie", b =>
                 {
                     b.HasOne("JAP_TASK_1_WEB_API.Models.CastMember", null)
@@ -846,12 +875,21 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JAP_TASK_1_WEB_API.Models.User", null)
+                        .WithMany("MyRatings")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("RatedMovie");
                 });
 
             modelBuilder.Entity("JAP_TASK_1_WEB_API.Models.Movie", b =>
                 {
                     b.Navigation("RatingList");
+                });
+
+            modelBuilder.Entity("JAP_TASK_1_WEB_API.Models.User", b =>
+                {
+                    b.Navigation("MyRatings");
                 });
 #pragma warning restore 612, 618
         }
