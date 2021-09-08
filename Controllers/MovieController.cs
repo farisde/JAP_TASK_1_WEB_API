@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JAP_TASK_1_WEB_API.DTOs.Movie;
 using JAP_TASK_1_WEB_API.Models;
@@ -23,7 +26,18 @@ namespace JAP_TASK_1_WEB_API.Controllers
         [HttpGet("AllMovies")]
         public async Task<ActionResult<PagedResponse<List<GetMovieDto>>>> GetAllMovies([FromQuery] PaginationQuery paginationQuery = null)
         {
-            var serviceResponse = await _movieService.GetMovies(paginationQuery);
+            int nullUserId = -1;
+            var serviceResponse = new PagedResponse<List<GetMovieDto>>();
+            if (User.Claims.Any())
+            {
+                int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value, out int userId);
+                serviceResponse = await _movieService.GetMovies(userId, paginationQuery);
+            }
+            else
+            {
+                serviceResponse = await _movieService.GetMovies(nullUserId, paginationQuery);
+            }
+
             if (serviceResponse.Success)
             {
                 return Ok(serviceResponse);
@@ -39,6 +53,7 @@ namespace JAP_TASK_1_WEB_API.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetMovieDto>>>> AddMovieRating(AddRatingDto newRating)
         {
             var response = await _movieService.AddMovieRating(newRating);
+
             if (response.Success)
             {
                 return Ok(response);

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JAP_TASK_1_WEB_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210906103614_InitialMigration")]
+    [Migration("20210906130411_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -875,11 +875,13 @@ namespace JAP_TASK_1_WEB_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JAP_TASK_1_WEB_API.Models.User", null)
+                    b.HasOne("JAP_TASK_1_WEB_API.Models.User", "User")
                         .WithMany("MyRatings")
                         .HasForeignKey("UserId");
 
                     b.Navigation("RatedMovie");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("JAP_TASK_1_WEB_API.Models.Movie", b =>
