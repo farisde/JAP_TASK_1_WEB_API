@@ -9,7 +9,7 @@ namespace MovieBuff.Services.MovieService
     public interface IMediaService
     {
         Task<PagedResponse<List<GetMediaDto>>> GetMedia(PaginationQuery paginationQuery = null);
-        Task<ServiceResponse<List<GetMediaDto>>> GetSearchResults(SendSearchResultsDto query);
+        /*Task<ServiceResponse<List<GetMediaDto>>> GetSearchResults(SendSearchQueryDto query);*/
         Task<ServiceResponse<GetMediaDto>> GetMedia(int id);
     }
 }

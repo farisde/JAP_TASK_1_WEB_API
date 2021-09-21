@@ -1,6 +1,6 @@
 namespace MovieBuff.DTOs.Movie
 {
-    public class SendSearchResultsDto
+    public class SendSearchQueryDto
     {
         public string SearchPhrase { get; set; }
     }
