@@ -6,6 +6,6 @@ namespace MovieBuff.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Movie> StarredMovies { get; set; }
+        public List<Media> StarredMedia { get; set; }
     }
 }

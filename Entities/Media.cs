@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MovieBuff.Models
 {
-    public class Movie
+    public class Media
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -13,6 +13,6 @@ namespace MovieBuff.Models
         public List<CastMember> Cast { get; set; }
         public double Rating { get; set; }
         public List<Rating> RatingList { get; set; }
-        public bool IsMovie { get; set; }
+        public MediaType MediaType { get; set; } = MediaType.Movie;
     }
 }

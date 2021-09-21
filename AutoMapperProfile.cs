@@ -8,7 +8,7 @@ namespace MovieBuff
     {
         public AutoMapperProfile()
         {
-            CreateMap<Movie, GetMovieDto>();
+            CreateMap<Media, GetMovieDto>();
             CreateMap<CastMember, GetCastMemberDto>();
             CreateMap<Rating, GetRatingDto>();
             CreateMap<AddRatingDto, Rating>();

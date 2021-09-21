@@ -20,7 +20,7 @@ namespace MovieBuff
         {
             services.AddDbServices(Configuration)
                     .AddAuthServices(Configuration)
-                    .AddMovieServices()
+                    .AddMediaServices()
                     .AddSwaggerServices()
                     .AddControllers(); 
         }

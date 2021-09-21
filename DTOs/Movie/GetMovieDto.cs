@@ -1,3 +1,4 @@
+using MovieBuff.Models;
 using System;
 using System.Collections.Generic;
 
@@ -13,6 +14,6 @@ namespace MovieBuff.DTOs.Movie
         public List<GetCastMemberDto> Cast { get; set; }
         public double Rating { get; set; }
         public List<GetRatingDto> RatingList { get; set; }
-        public bool IsMovie { get; set; }
+        public MediaType MediaType { get; set; }
     }
 }

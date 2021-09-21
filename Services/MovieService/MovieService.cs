@@ -27,38 +27,30 @@ namespace MovieBuff.Services.MovieService
         public async Task<PagedResponse<List<GetMovieDto>>> GetMovies(PaginationQuery paginationQuery = null)
         {
             var serviceResponse = new PagedResponse<List<GetMovieDto>>();
-            List<Movie> dbMovies = null;
-            if (paginationQuery.PageNumber == 0)
+            IQueryable<Media> dbMovies = _context.Medias
+                                                 .Include(m => m.RatingList)
+                                                 .Include(m => m.Cast)
+                                                 .Where(m => m.MediaType == paginationQuery.MediaType)
+                                                 .AsQueryable();
+            if (paginationQuery == null)
             {
-                dbMovies = await _context.Movies
-                                .Include(m => m.RatingList)
-                                .Include(m => m.Cast)
-                                .ToListAsync();
-            }
-            else
-            {
-                dbMovies = await _context.Movies
-                                .Include(m => m.RatingList)
-                                .Include(m => m.Cast)
-                                .Take(paginationQuery.PageSize * paginationQuery.PageNumber)
-                                .ToListAsync();
+                paginationQuery = new PaginationQuery();
             }
 
-            if (paginationQuery.PageNumber >= 1)
-            {
-                var skipAmount = (paginationQuery.PageNumber) * paginationQuery.PageSize;
-                var testMovies = await _context.Movies
-                                .Include(m => m.RatingList)
-                                .Include(m => m.Cast)
-                                .Skip(skipAmount)
-                                .Take(paginationQuery.PageSize * paginationQuery.PageNumber)
-                                .ToListAsync();
-                serviceResponse.NextPage = testMovies.Any() ? paginationQuery.PageNumber + 1 : null;
-            }
+            var skipAmount = (paginationQuery.PageNumber - 1) * paginationQuery.PageSize;
+            var nextPageExists = dbMovies.Skip(paginationQuery.PageSize * paginationQuery.PageNumber)
+                                         .Take(paginationQuery.PageSize)
+                                         .Any();
+            serviceResponse.NextPage = nextPageExists ? paginationQuery.PageNumber + 1 : null;
+
+            dbMovies = dbMovies.Skip(skipAmount)
+                               .Take(paginationQuery.PageSize * paginationQuery.PageNumber);
+
             if (paginationQuery.PageNumber - 1 >= 1)
             {
                 serviceResponse.PreviousPage = paginationQuery.PageNumber - 1;
             }
+
             serviceResponse.PageNumber = paginationQuery.PageNumber;
             serviceResponse.PageSize = paginationQuery.PageSize;
 
@@ -72,7 +64,7 @@ namespace MovieBuff.Services.MovieService
         {
             var response = new ServiceResponse<List<GetMovieDto>>();
 
-            var dbMovies = _context.Movies
+            var dbMovies = _context.Medias
                 .Include(m => m.RatingList)
                 .Include(m => m.Cast)
                 .AsQueryable();
@@ -83,7 +75,7 @@ namespace MovieBuff.Services.MovieService
             return response;
         }
 
-        private IQueryable<Movie> FilterSearchResults(IQueryable<Movie> dbMovies, SendSearchResultsDto query)
+        private IQueryable<Media> FilterSearchResults(IQueryable<Media> dbMovies, SendSearchResultsDto query)
         {
             var targetValue = GetNumberFromString(query.SearchPhrase);
             if (query.SearchPhrase.Contains("star") && targetValue != -1)

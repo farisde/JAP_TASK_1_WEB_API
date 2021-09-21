@@ -1,23 +1,25 @@
+using MovieBuff.Models;
+
 namespace MovieBuff.Queries
 {
     public class PaginationQuery
     {
         public PaginationQuery()
         {
-            // PageNumber = 1;
-            // PageSize = 1;
-            // IsMovie = true;
+            PageNumber = 1;
+            PageSize = 10;
+            MediaType = MediaType.Movie;
         }
 
-        public PaginationQuery(int pageNumber, int pageSize, bool contentType)
+        public PaginationQuery(int pageNumber, int pageSize, MediaType mediaType)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
-            IsMovie = contentType;
+            MediaType = mediaType;
         }
 
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public bool IsMovie { get; set; } = true;
+        public MediaType MediaType { get; set; }
     }
 }

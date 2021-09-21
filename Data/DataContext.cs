@@ -11,13 +11,14 @@ namespace MovieBuff.Data
 
         }
 
-        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Media> Medias { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<CastMember> CastMembers { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region CastMembers
             var cm1 = new CastMember { Id = 1, Name = "Carrie Fisher" };
             var cm2 = new CastMember { Id = 2, Name = "Mark Hamil" };
             var cm3 = new CastMember { Id = 3, Name = "Harrison Ford" };
@@ -91,9 +92,10 @@ namespace MovieBuff.Data
             var cm58 = new CastMember { Id = 58, Name = "Zoe Saldana" };
             var cm59 = new CastMember { Id = 59, Name = "Sam Worthington" };
             var cm60 = new CastMember { Id = 60, Name = "Sigourney Weaver" };
+            #endregion
 
-
-            var m1 = new Movie
+            #region Media
+            var m1 = new Media
             {
                 Id = 1,
                 Title = "Star Wars: A New Hope (Episode IV)",
@@ -101,10 +103,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(1997, 5, 25),
                 CoverImage = "https://kbimages1-a.akamaihd.net/538b1473-6d45-47f4-b16e-32a0a6ba7f9a/1200/1200/False/star-wars-episode-iv-a-new-hope-3.jpg",
                 Rating = 5,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m2 = new Movie
+            var m2 = new Media
             {
                 Id = 2,
                 Title = "Star Wars: The Empire Strikes Back (Episode V)",
@@ -112,10 +114,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(1980, 5, 21),
                 CoverImage = "https://images.penguinrandomhouse.com/cover/9780345320223",
                 Rating = 4.8,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m3 = new Movie
+            var m3 = new Media
             {
                 Id = 3,
                 Title = "Riverdale",
@@ -123,10 +125,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2017, 1, 26),
                 CoverImage = "https://static.wikia.nocookie.net/riverdalearchie/images/3/3a/Season_2_Poster.jpg",
                 Rating = 4.5,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m4 = new Movie
+            var m4 = new Media
             {
                 Id = 4,
                 Title = "The Blacklist",
@@ -134,10 +136,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2013, 9, 23),
                 CoverImage = "https://static.wikia.nocookie.net/blacklist/images/5/57/Season_7_Poster.jpg",
                 Rating = 5,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m5 = new Movie
+            var m5 = new Media
             {
                 Id = 5,
                 Title = "Star Wars: Return of the Jedi (Episode VI)",
@@ -145,10 +147,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(1983, 5, 25),
                 CoverImage = "https://m.media-amazon.com/images/I/91LlN7J+Z9L._SL1500_.jpg",
                 Rating = 4.9,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m6 = new Movie
+            var m6 = new Media
             {
                 Id = 6,
                 Title = "Star Wars: The Force Awakens (Episode VII)",
@@ -156,10 +158,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2015, 11, 17),
                 CoverImage = "https://m.media-amazon.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_.jpg",
                 Rating = 4.5,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m7 = new Movie
+            var m7 = new Media
             {
                 Id = 7,
                 Title = "Star Wars: The Last Jedi (Episode VIII)",
@@ -167,10 +169,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2017, 11, 15),
                 CoverImage = "https://i.pinimg.com/originals/f4/5a/ea/f45aea75f65c0feb5cbe168f17a9a087.jpg",
                 Rating = 4.9,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m8 = new Movie
+            var m8 = new Media
             {
                 Id = 8,
                 Title = "Star Wars: The Rise of Skywalker (Episode IX)",
@@ -178,10 +180,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2019, 11, 20),
                 CoverImage = "https://lumiere-a.akamaihd.net/v1/images/star-wars-the-rise-of-skywalker-theatrical-poster-1000_ebc74357.jpeg?region=0%2C0%2C891%2C1372",
                 Rating = 4,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m9 = new Movie
+            var m9 = new Media
             {
                 Id = 9,
                 Title = "Star Wars: The Phantom Menace (Episode I)",
@@ -189,10 +191,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(1999, 4, 19),
                 CoverImage = "https://play-lh.googleusercontent.com/sR1pzOxnF50WLR3vUqXYFvY01_tLD4XPn1RDHf0Xh-W04Vek_3iiZ98U7Db2JcmrqS8",
                 Rating = 3.5,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m10 = new Movie
+            var m10 = new Media
             {
                 Id = 10,
                 Title = "Star Wars: Attack of the Clones (Episode II)",
@@ -200,10 +202,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2002, 4, 16),
                 CoverImage = "https://m.media-amazon.com/images/M/MV5BMDAzM2M0Y2UtZjRmZi00MzVlLTg4MjEtOTE3NzU5ZDVlMTU5XkEyXkFqcGdeQXVyNDUyOTg3Njg@._V1_.jpg",
                 Rating = 3.8,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m11 = new Movie
+            var m11 = new Media
             {
                 Id = 11,
                 Title = "Star Wars: Revenge of the Sith (Episode III)",
@@ -211,10 +213,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2005, 4, 19),
                 CoverImage = "https://play-lh.googleusercontent.com/mMyoXM8bf72KK-Udap4-hAvqqdXgn0AIBXkS8zejT0RXITIh8oK9a-SYIVk89CA0rHJi",
                 Rating = 4.2,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m12 = new Movie
+            var m12 = new Media
             {
                 Id = 12,
                 Title = "Avatar",
@@ -222,10 +224,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2009, 11, 17),
                 CoverImage = "https://i.pinimg.com/originals/17/aa/71/17aa718c1ab15b482505b8431cf596fc.jpg",
                 Rating = 4.9,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m13 = new Movie
+            var m13 = new Media
             {
                 Id = 13,
                 Title = "Chernobyl",
@@ -233,10 +235,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2019, 4, 6),
                 CoverImage = "https://i.pinimg.com/originals/06/b2/2f/06b22f1ec7b9a6914ec6255f40953e98.jpg",
                 Rating = 3.6,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m14 = new Movie
+            var m14 = new Media
             {
                 Id = 14,
                 Title = "La Casa De Papel",
@@ -244,10 +246,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2017, 4, 2),
                 CoverImage = "https://www.enigma-mag.com/wp-content/uploads/2019/08/1563490297.jpg",
                 Rating = 4,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m15 = new Movie
+            var m15 = new Media
             {
                 Id = 15,
                 Title = "Modern Family",
@@ -255,10 +257,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2009, 8, 23),
                 CoverImage = "https://upload.wikimedia.org/wikipedia/en/thumb/0/09/Modern_Family_Season_Two_DVD_Cover.png/250px-Modern_Family_Season_Two_DVD_Cover.png",
                 Rating = 4.3,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m16 = new Movie
+            var m16 = new Media
             {
                 Id = 16,
                 Title = "The Mandalorian",
@@ -266,10 +268,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2019, 10, 12),
                 CoverImage = "https://lumiere-a.akamaihd.net/v1/images/p_fyc_themandalorian_19097_de619ea9.jpeg",
                 Rating = 4.2,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m17 = new Movie
+            var m17 = new Media
             {
                 Id = 17,
                 Title = "Harry Potter and the Philosopher's Stone",
@@ -277,10 +279,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2001, 11, 14),
                 CoverImage = "https://movieguise.files.wordpress.com/2016/01/potter.jpg",
                 Rating = 4.6,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m18 = new Movie
+            var m18 = new Media
             {
                 Id = 18,
                 Title = "Harry Potter and The Chamber Of Secrets",
@@ -288,10 +290,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2002, 11, 3),
                 CoverImage = "https://www.hylandcinema.com/files/hyland/movie-posters/hp-_chamber.jpg",
                 Rating = 4.4,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m19 = new Movie
+            var m19 = new Media
             {
                 Id = 19,
                 Title = "Harry Potter and The Prisoner Of Azkaban",
@@ -299,10 +301,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2004, 5, 31),
                 CoverImage = "https://static.wikia.nocookie.net/warner-bros-entertainment/images/c/cb/Harry-potter-and-the-prisoner-of-azkaban-movie-poster-style-f-11x17.jpg",
                 Rating = 4,
-                IsMovie = true
+                MediaType = MediaType.Movie
             };
 
-            var m20 = new Movie
+            var m20 = new Media
             {
                 Id = 20,
                 Title = "Agents of S.H.I.E.L.D.",
@@ -310,10 +312,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2013, 9, 24),
                 CoverImage = "https://static.wikia.nocookie.net/marvelcinematicuniverse/images/1/10/AoS_Season_One_Poster.jpg",
                 Rating = 4.9,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m21 = new Movie
+            var m21 = new Media
             {
                 Id = 21,
                 Title = "Years and Years",
@@ -321,10 +323,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2019, 5, 14),
                 CoverImage = "https://i.pinimg.com/474x/4e/96/06/4e9606a7f386cafa7903e28e94e43627.jpg",
                 Rating = 2.7,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m22 = new Movie
+            var m22 = new Media
             {
                 Id = 22,
                 Title = "MacGyver",
@@ -332,10 +334,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2016, 9, 23),
                 CoverImage = "https://m.media-amazon.com/images/M/MV5BMTg1NzUzNmQtMWI2ZC00YzdlLWI5ZTgtMGM3MjJlZTgwYTVlXkEyXkFqcGdeQXVyMTIzMzY2NDQ2._V1_FMjpg_UX1000_.jpg",
                 Rating = 3.3,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m23 = new Movie
+            var m23 = new Media
             {
                 Id = 23,
                 Title = "Grey's Anatomy",
@@ -343,10 +345,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2005, 3, 27),
                 CoverImage = "http://www.gstatic.com/tv/thumb/tvbanners/17114349/p17114349_b_v12_aa.jpg",
                 Rating = 5,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m24 = new Movie
+            var m24 = new Media
             {
                 Id = 24,
                 Title = "Euphoria",
@@ -354,10 +356,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2019, 6, 16),
                 CoverImage = "https://lanetechchampion.org/wp-content/uploads/2020/09/zendya-euphoria.jpg",
                 Rating = 3,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m25 = new Movie
+            var m25 = new Media
             {
                 Id = 25,
                 Title = "The Witcher",
@@ -365,10 +367,10 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2019, 12, 20),
                 CoverImage = "https://www.syfy.com/sites/syfy/files/styles/1170xauto/public/the-witcher-season-2-poster-vertical.jpg",
                 Rating = 5,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
 
-            var m26 = new Movie
+            var m26 = new Media
             {
                 Id = 26,
                 Title = "Chilling Adventures of Sabrina",
@@ -376,37 +378,38 @@ namespace MovieBuff.Data
                 ReleaseDate = new DateTime(2018, 10, 26),
                 CoverImage = "https://images-na.ssl-images-amazon.com/images/I/81bLWVTR3sL.jpg",
                 Rating = 4.1,
-                IsMovie = false
+                MediaType = MediaType.TvShow
             };
+            #endregion
 
-
-            var r1 = new Rating { Id = 1, Value = 5, RatedMovieId = m1.Id };
-            var r2 = new Rating { Id = 2, Value = 4.8, RatedMovieId = m2.Id };
-            var r3 = new Rating { Id = 3, Value = 4.5, RatedMovieId = m3.Id };
-            var r4 = new Rating { Id = 4, Value = 5, RatedMovieId = m4.Id };
-            var r5 = new Rating { Id = 5, Value = 4.9, RatedMovieId = m5.Id };
-            var r6 = new Rating { Id = 6, Value = 4.5, RatedMovieId = m6.Id };
-            var r7 = new Rating { Id = 7, Value = 4.9, RatedMovieId = m7.Id };
-            var r8 = new Rating { Id = 8, Value = 4, RatedMovieId = m8.Id };
-            var r9 = new Rating { Id = 9, Value = 3.5, RatedMovieId = m9.Id };
-            var r10 = new Rating { Id = 10, Value = 3.8, RatedMovieId = m10.Id };
-            var r11 = new Rating { Id = 11, Value = 4.2, RatedMovieId = m11.Id };
-            var r12 = new Rating { Id = 12, Value = 4.9, RatedMovieId = m12.Id };
-            var r13 = new Rating { Id = 13, Value = 3.6, RatedMovieId = m13.Id };
-            var r14 = new Rating { Id = 14, Value = 4, RatedMovieId = m14.Id };
-            var r15 = new Rating { Id = 15, Value = 4.3, RatedMovieId = m15.Id };
-            var r16 = new Rating { Id = 16, Value = 4.2, RatedMovieId = m16.Id };
-            var r17 = new Rating { Id = 17, Value = 4.6, RatedMovieId = m17.Id };
-            var r18 = new Rating { Id = 18, Value = 4.4, RatedMovieId = m18.Id };
-            var r19 = new Rating { Id = 19, Value = 4, RatedMovieId = m19.Id };
-            var r20 = new Rating { Id = 20, Value = 4.9, RatedMovieId = m20.Id };
-            var r21 = new Rating { Id = 21, Value = 2.7, RatedMovieId = m21.Id };
-            var r22 = new Rating { Id = 22, Value = 3.3, RatedMovieId = m22.Id };
-            var r23 = new Rating { Id = 23, Value = 5, RatedMovieId = m23.Id };
-            var r24 = new Rating { Id = 24, Value = 3, RatedMovieId = m24.Id };
-            var r25 = new Rating { Id = 25, Value = 5, RatedMovieId = m25.Id };
-            var r26 = new Rating { Id = 26, Value = 4.1, RatedMovieId = m26.Id };
-
+            #region Ratings
+            var r1 = new Rating { Id = 1, Value = 5, RatedMediaId = m1.Id };
+            var r2 = new Rating { Id = 2, Value = 4.8, RatedMediaId = m2.Id };
+            var r3 = new Rating { Id = 3, Value = 4.5, RatedMediaId = m3.Id };
+            var r4 = new Rating { Id = 4, Value = 5, RatedMediaId = m4.Id };
+            var r5 = new Rating { Id = 5, Value = 4.9, RatedMediaId = m5.Id };
+            var r6 = new Rating { Id = 6, Value = 4.5, RatedMediaId = m6.Id };
+            var r7 = new Rating { Id = 7, Value = 4.9, RatedMediaId = m7.Id };
+            var r8 = new Rating { Id = 8, Value = 4, RatedMediaId = m8.Id };
+            var r9 = new Rating { Id = 9, Value = 3.5, RatedMediaId = m9.Id };
+            var r10 = new Rating { Id = 10, Value = 3.8, RatedMediaId = m10.Id };
+            var r11 = new Rating { Id = 11, Value = 4.2, RatedMediaId = m11.Id };
+            var r12 = new Rating { Id = 12, Value = 4.9, RatedMediaId = m12.Id };
+            var r13 = new Rating { Id = 13, Value = 3.6, RatedMediaId = m13.Id };
+            var r14 = new Rating { Id = 14, Value = 4, RatedMediaId = m14.Id };
+            var r15 = new Rating { Id = 15, Value = 4.3, RatedMediaId = m15.Id };
+            var r16 = new Rating { Id = 16, Value = 4.2, RatedMediaId = m16.Id };
+            var r17 = new Rating { Id = 17, Value = 4.6, RatedMediaId = m17.Id };
+            var r18 = new Rating { Id = 18, Value = 4.4, RatedMediaId = m18.Id };
+            var r19 = new Rating { Id = 19, Value = 4, RatedMediaId = m19.Id };
+            var r20 = new Rating { Id = 20, Value = 4.9, RatedMediaId = m20.Id };
+            var r21 = new Rating { Id = 21, Value = 2.7, RatedMediaId = m21.Id };
+            var r22 = new Rating { Id = 22, Value = 3.3, RatedMediaId = m22.Id };
+            var r23 = new Rating { Id = 23, Value = 5, RatedMediaId = m23.Id };
+            var r24 = new Rating { Id = 24, Value = 3, RatedMediaId = m24.Id };
+            var r25 = new Rating { Id = 25, Value = 5, RatedMediaId = m25.Id };
+            var r26 = new Rating { Id = 26, Value = 4.1, RatedMediaId = m26.Id };
+            #endregion
 
             modelBuilder.Entity<CastMember>().HasData(
                 cm1, cm2, cm3, cm4, cm5, cm6, cm7, cm8, cm9, cm10, cm11,
@@ -417,7 +420,7 @@ namespace MovieBuff.Data
                 cm56, cm57, cm58, cm59, cm60
             );
 
-            modelBuilder.Entity<Movie>().HasData(
+            modelBuilder.Entity<Media>().HasData(
                 m1, m2, m3, m4, m5, m6, m7, m8, m9, m10,
                 m11, m12, m13, m14, m15, m16, m17, m18, m19, m20,
                 m21, m22, m23, m24, m25, m26

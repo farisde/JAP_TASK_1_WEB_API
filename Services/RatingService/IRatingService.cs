@@ -7,6 +7,6 @@ namespace MovieBuff.Services.RatingService
 {
     public interface IRatingService
     {
-        Task<ServiceResponse<List<GetMovieDto>>> AddMovieRating(AddRatingDto newRating);
+        Task<ServiceResponse<GetRatingDto>> AddMovieRating(AddRatingDto newRating);
     }
 }
