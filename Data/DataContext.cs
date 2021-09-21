@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using MovieBuff.Models;
 using Microsoft.EntityFrameworkCore;
+using MovieBuff.Models;
+using System;
 
 namespace MovieBuff.Data
 {

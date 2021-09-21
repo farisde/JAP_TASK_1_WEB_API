@@ -1,13 +1,13 @@
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using MovieBuff.Data;
 using MovieBuff.DTOs.User;
 using MovieBuff.Models;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace MovieBuff.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepo;
@@ -17,31 +17,23 @@ namespace MovieBuff.Controllers
             _authRepo = authRepo;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
                 new User { Name = request.Name, Email = request.Email },
                 request.Password
             );
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
 
             return Ok(response);
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
         {
             var response = await _authRepo.Login(
                 request.Email, request.Password
             );
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
 
             return Ok(response);
         }

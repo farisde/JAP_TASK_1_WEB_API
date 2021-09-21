@@ -1,14 +1,14 @@
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MovieBuff.Data;
+using MovieBuff.DTOs.Movie;
+using MovieBuff.Models;
+using MovieBuff.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AutoMapper;
-using MovieBuff.Data;
-using MovieBuff.DTOs.Movie;
-using MovieBuff.Models;
-using MovieBuff.Queries;
-using Microsoft.EntityFrameworkCore;
 
 namespace MovieBuff.Services.MovieService
 {
@@ -24,37 +24,7 @@ namespace MovieBuff.Services.MovieService
 
         }
 
-        public async Task<ServiceResponse<List<GetMovieDto>>> AddMovieRating(AddRatingDto newRating)
-        {
-            var response = new ServiceResponse<List<GetMovieDto>>();
-            var ratedMovie = await _context.Movies
-                .Include(m => m.Cast)
-                .Include(m => m.RatingList)
-                .FirstOrDefaultAsync(m => m.Id == newRating.RatedMovieId);
-            var rating = new Rating
-            {
-                Value = newRating.Value,
-                RatedMovie = ratedMovie,
-                RatedMovieId = newRating.RatedMovieId
-            };
-            _context.Ratings.Add(rating);
-
-            ratedMovie.Rating = ratedMovie.RatingList.Average(r => r.Value);
-
-            _context.Movies.Update(ratedMovie);
-            await _context.SaveChangesAsync();
-
-            var dbMovies = await _context.Movies
-                    .Include(m => m.Cast)
-                    .Include(m => m.RatingList)
-                    .ToListAsync();
-
-            response.Data = dbMovies.Select(m => _mapper.Map<GetMovieDto>(m)).ToList();
-            response.Data = SortMoviesByRating(response.Data);
-            return response;
-        }
-
-        public async Task<PagedResponse<List<GetMovieDto>>> GetMovies(int userId, PaginationQuery paginationQuery = null)
+        public async Task<PagedResponse<List<GetMovieDto>>> GetMovies(PaginationQuery paginationQuery = null)
         {
             var serviceResponse = new PagedResponse<List<GetMovieDto>>();
             List<Movie> dbMovies = null;
@@ -92,8 +62,9 @@ namespace MovieBuff.Services.MovieService
             serviceResponse.PageNumber = paginationQuery.PageNumber;
             serviceResponse.PageSize = paginationQuery.PageSize;
 
-            serviceResponse.Data = dbMovies.Select(m => _mapper.Map<GetMovieDto>(m)).ToList();
-            serviceResponse.Data = SortMoviesByRating(serviceResponse.Data);
+            serviceResponse.Data = dbMovies.OrderByDescending(m => m.Rating)
+                                           .Select(m => _mapper.Map<GetMovieDto>(m))
+                                           .ToList();
             return serviceResponse;
         }
 
@@ -101,34 +72,40 @@ namespace MovieBuff.Services.MovieService
         {
             var response = new ServiceResponse<List<GetMovieDto>>();
 
-            var dbMovies = await _context.Movies
+            var dbMovies = _context.Movies
                 .Include(m => m.RatingList)
                 .Include(m => m.Cast)
-                .ToListAsync();
+                .AsQueryable();
 
-            //search phrases implementation
+            response.Data = await FilterSearchResults(dbMovies, query)
+                                    .Select(m => _mapper.Map<GetMovieDto>(m))
+                                    .ToListAsync();
+            return response;
+        }
+
+        private IQueryable<Movie> FilterSearchResults(IQueryable<Movie> dbMovies, SendSearchResultsDto query)
+        {
             var targetValue = GetNumberFromString(query.SearchPhrase);
             if (query.SearchPhrase.Contains("star") && targetValue != -1)
             {
                 if (query.SearchPhrase.Contains("least"))
                 {
-                    dbMovies = dbMovies.Where(m => m.Rating >= targetValue).ToList();
+                    dbMovies = dbMovies.Where(m => m.Rating >= targetValue);
                 }
                 else if (query.SearchPhrase.Contains("most"))
                 {
-                    dbMovies = dbMovies.Where(m => m.Rating < targetValue + 1).ToList();
+                    dbMovies = dbMovies.Where(m => m.Rating < targetValue + 1);
                 }
                 else
                 {
                     if (targetValue == 5)
                     {
-                        dbMovies = dbMovies.Where(m => m.Rating.Equals(targetValue)).ToList();
+                        dbMovies = dbMovies.Where(m => m.Rating.Equals(targetValue));
                     }
                     else
                     {
                         dbMovies = dbMovies.Where(m => m.Rating.Equals(targetValue) ||
-                                                        m.Rating > targetValue && m.Rating < targetValue + 1)
-                                            .ToList();
+                                                        m.Rating > targetValue && m.Rating < targetValue + 1);
                     }
                 }
             }
@@ -136,11 +113,11 @@ namespace MovieBuff.Services.MovieService
             {
                 if (query.SearchPhrase.Contains("before"))
                 {
-                    dbMovies = dbMovies.Where(m => m.ReleaseDate.Year < targetValue).ToList();
+                    dbMovies = dbMovies.Where(m => m.ReleaseDate.Year < targetValue);
                 }
                 else
                 {
-                    dbMovies = dbMovies.Where(m => m.ReleaseDate.Year > targetValue).ToList();
+                    dbMovies = dbMovies.Where(m => m.ReleaseDate.Year > targetValue);
                 }
             }
             else if (query.SearchPhrase.Contains("older"))
@@ -148,33 +125,19 @@ namespace MovieBuff.Services.MovieService
                 if (query.SearchPhrase.Contains("year"))
                 {
                     dbMovies = dbMovies
-                        .Where(m => m.ReleaseDate < DateTime.Now.AddYears(-1 * Convert.ToInt32(targetValue)))
-                        .ToList();
+                        .Where(m => m.ReleaseDate < DateTime.Now.AddYears(-1 * Convert.ToInt32(targetValue)));
                 }
             }
             else
             {
                 dbMovies = dbMovies
                 .Where(m =>
-                {
-                    return m.Title.ToUpper().Contains(query.SearchPhrase.ToUpper()) ||
-                            m.Description.ToUpper().Contains(query.SearchPhrase.ToUpper()) ||
-                            m.Cast.Any(c => c.Name.ToUpper().Contains(query.SearchPhrase.ToUpper()));
-                }).ToList();
+                    m.Title.ToUpper().Contains(query.SearchPhrase.ToUpper()) ||
+                    m.Description.ToUpper().Contains(query.SearchPhrase.ToUpper()) ||
+                    m.Cast.Any(c => c.Name.ToUpper().Contains(query.SearchPhrase.ToUpper()))
+                );
             }
-
-
-
-            response.Data = dbMovies.Select(m => _mapper.Map<GetMovieDto>(m)).ToList();
-            response.Data = SortMoviesByRating(response.Data);
-
-            return response;
-        }
-
-        private List<GetMovieDto> SortMoviesByRating(List<GetMovieDto> movies)
-        {
-            movies.Sort((m1, m2) => m2.Rating.CompareTo(m1.Rating));
-            return movies;
+            return dbMovies.OrderByDescending(m => m.Rating);
         }
 
         private double GetNumberFromString(string phrase)

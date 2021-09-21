@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using MovieBuff.Models;
+using System.Threading.Tasks;
 
 namespace MovieBuff.Data
 {
