@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MovieBuff.DTOs.Movie
 {
-    public class GetMovieDto
+    public class GetMediaDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

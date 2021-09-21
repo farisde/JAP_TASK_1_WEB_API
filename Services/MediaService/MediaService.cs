@@ -12,21 +12,21 @@ using System.Threading.Tasks;
 
 namespace MovieBuff.Services.MovieService
 {
-    public class MovieService : IMovieService
+    public class MediaService : IMediaService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public MovieService(DataContext context, IMapper mapper)
+        public MediaService(DataContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
 
         }
 
-        public async Task<PagedResponse<List<GetMovieDto>>> GetMovies(PaginationQuery paginationQuery = null)
+        public async Task<PagedResponse<List<GetMediaDto>>> GetMedia(PaginationQuery paginationQuery = null)
         {
-            var serviceResponse = new PagedResponse<List<GetMovieDto>>();
+            var response = new PagedResponse<List<GetMediaDto>>();
             IQueryable<Media> dbMovies = _context.Medias
                                                  .Include(m => m.RatingList)
                                                  .Include(m => m.Cast)
@@ -41,28 +41,38 @@ namespace MovieBuff.Services.MovieService
             var nextPageExists = dbMovies.Skip(paginationQuery.PageSize * paginationQuery.PageNumber)
                                          .Take(paginationQuery.PageSize)
                                          .Any();
-            serviceResponse.NextPage = nextPageExists ? paginationQuery.PageNumber + 1 : null;
+            response.NextPage = nextPageExists ? paginationQuery.PageNumber + 1 : null;
 
             dbMovies = dbMovies.Skip(skipAmount)
                                .Take(paginationQuery.PageSize * paginationQuery.PageNumber);
 
             if (paginationQuery.PageNumber - 1 >= 1)
             {
-                serviceResponse.PreviousPage = paginationQuery.PageNumber - 1;
+                response.PreviousPage = paginationQuery.PageNumber - 1;
             }
 
-            serviceResponse.PageNumber = paginationQuery.PageNumber;
-            serviceResponse.PageSize = paginationQuery.PageSize;
+            response.PageNumber = paginationQuery.PageNumber;
+            response.PageSize = paginationQuery.PageSize;
 
-            serviceResponse.Data = dbMovies.OrderByDescending(m => m.Rating)
-                                           .Select(m => _mapper.Map<GetMovieDto>(m))
+            response.Data = dbMovies.OrderByDescending(m => m.Rating)
+                                           .Select(m => _mapper.Map<GetMediaDto>(m))
                                            .ToList();
-            return serviceResponse;
+            return response;
         }
 
-        public async Task<ServiceResponse<List<GetMovieDto>>> GetSearchResults(SendSearchResultsDto query)
+        public async Task<ServiceResponse<GetMediaDto>> GetMedia(int id)
         {
-            var response = new ServiceResponse<List<GetMovieDto>>();
+            var response = new ServiceResponse<GetMediaDto>();
+            var dbMedia = await _context.Medias.Include(m => m.RatingList)
+                                           .Include(m => m.Cast)
+                                           .FirstOrDefaultAsync(m => m.Id == id);
+            response.Data = _mapper.Map<GetMediaDto>(dbMedia);
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<GetMediaDto>>> GetSearchResults(SendSearchResultsDto query)
+        {
+            var response = new ServiceResponse<List<GetMediaDto>>();
 
             var dbMovies = _context.Medias
                 .Include(m => m.RatingList)
@@ -70,7 +80,7 @@ namespace MovieBuff.Services.MovieService
                 .AsQueryable();
 
             response.Data = await FilterSearchResults(dbMovies, query)
-                                    .Select(m => _mapper.Map<GetMovieDto>(m))
+                                    .Select(m => _mapper.Map<GetMediaDto>(m))
                                     .ToListAsync();
             return response;
         }

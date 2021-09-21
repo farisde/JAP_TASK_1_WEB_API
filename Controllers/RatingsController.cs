@@ -19,7 +19,7 @@ namespace MovieBuff.Controllers
         }
 
         [HttpPost("addMovieRating")]
-        public async Task<ActionResult<ServiceResponse<List<GetMovieDto>>>> AddMovieRating(AddRatingDto newRating)
+        public async Task<ActionResult<ServiceResponse<List<GetMediaDto>>>> AddMovieRating(AddRatingDto newRating)
         {
             var response = await _ratingService.AddMovieRating(newRating);
             return Ok(response);
