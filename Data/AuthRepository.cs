@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using JAP_TASK_1_WEB_API.Models;
+using MovieBuff.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JAP_TASK_1_WEB_API.Data
+namespace MovieBuff.Data
 {
     public class AuthRepository : IAuthRepository
     {

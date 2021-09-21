@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace JAP_TASK_1_WEB_API
+namespace MovieBuff
 {
     public class Program
     {

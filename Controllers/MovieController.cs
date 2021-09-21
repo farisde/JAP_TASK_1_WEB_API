@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using JAP_TASK_1_WEB_API.DTOs.Movie;
-using JAP_TASK_1_WEB_API.Models;
-using JAP_TASK_1_WEB_API.Queries;
-using JAP_TASK_1_WEB_API.Services.MovieService;
+using MovieBuff.DTOs.Movie;
+using MovieBuff.Models;
+using MovieBuff.Queries;
+using MovieBuff.Services.MovieService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JAP_TASK_1_WEB_API.Controllers
+namespace MovieBuff.Controllers
 {
     [ApiController]
     [Route("[controller]")]

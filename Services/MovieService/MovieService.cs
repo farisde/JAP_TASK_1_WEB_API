@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using JAP_TASK_1_WEB_API.Data;
-using JAP_TASK_1_WEB_API.DTOs.Movie;
-using JAP_TASK_1_WEB_API.Models;
-using JAP_TASK_1_WEB_API.Queries;
+using MovieBuff.Data;
+using MovieBuff.DTOs.Movie;
+using MovieBuff.Models;
+using MovieBuff.Queries;
 using Microsoft.EntityFrameworkCore;
 
-namespace JAP_TASK_1_WEB_API.Services.MovieService
+namespace MovieBuff.Services.MovieService
 {
     public class MovieService : IMovieService
     {

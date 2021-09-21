@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using JAP_TASK_1_WEB_API.Models;
+using MovieBuff.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace JAP_TASK_1_WEB_API.Data
+namespace MovieBuff.Data
 {
     public class DataContext : DbContext
     {
