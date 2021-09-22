@@ -22,21 +22,21 @@ namespace MovieBuff.Services.RatingService
         public async Task<ServiceResponse<GetRatingDto>> AddMovieRating(AddRatingDto newRating)
         {
             var response = new ServiceResponse<GetRatingDto>();
-            var ratedMovie = await _context.Medias
+            var ratedMedia = await _context.Medias
                 .Include(m => m.Cast)
                 .Include(m => m.RatingList)
                 .FirstOrDefaultAsync(m => m.Id == newRating.RatedMediaId);
+
             var rating = new Rating
             {
                 Value = newRating.Value,
-                RatedMedia = ratedMovie,
                 RatedMediaId = newRating.RatedMediaId
             };
             _context.Ratings.Add(rating);
 
-            ratedMovie.Rating = ratedMovie.RatingList.Average(r => r.Value);
+            ratedMedia.Rating = ratedMedia.RatingList.Average(r => r.Value);
 
-            _context.Medias.Update(ratedMovie);
+            _context.Medias.Update(ratedMedia);
             await _context.SaveChangesAsync();
 
             response.Data = _mapper.Map<GetRatingDto>(rating);

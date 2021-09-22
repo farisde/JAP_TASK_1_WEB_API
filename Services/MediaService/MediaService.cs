@@ -77,25 +77,10 @@ namespace MovieBuff.Services.MovieService
             return response;
         }
 
-        /*public async Task<ServiceResponse<List<GetMediaDto>>> GetSearchResults(SendSearchQueryDto query)
-        {
-            var response = new ServiceResponse<List<GetMediaDto>>();
-
-            var dbMovies = _context.Medias
-                .Include(m => m.RatingList)
-                .Include(m => m.Cast)
-                .AsQueryable();
-
-            response.Data = await FilterSearchResults(dbMovies, query)
-                                    .Select(m => _mapper.Map<GetMediaDto>(m))
-                                    .ToListAsync();
-            return response;
-        }*/
-
         private IQueryable<Media> FilterSearchResults(IQueryable<Media> dbMovies, PaginationQuery query)
         {
             var targetValue = GetNumberFromString(query.SearchPhrase);
-            if (query.SearchPhrase.Contains("star") && targetValue != -1)
+            if (query.SearchPhrase.Contains("star") && targetValue != null)
             {
                 if (query.SearchPhrase.Contains("least"))
                 {
@@ -149,7 +134,7 @@ namespace MovieBuff.Services.MovieService
             return dbMovies.OrderByDescending(m => m.Rating);
         }
 
-        private double GetNumberFromString(string phrase)
+        private double? GetNumberFromString(string phrase)
         {
             try
             {
@@ -157,7 +142,7 @@ namespace MovieBuff.Services.MovieService
             }
             catch (Exception ex)
             {
-                return -1;
+                return null;
             }
         }
     }

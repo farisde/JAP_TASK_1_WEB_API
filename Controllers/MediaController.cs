@@ -35,12 +35,5 @@ namespace MovieBuff.Controllers
             var response = await _movieService.GetMedia(id);
             return Ok(response);
         }
-
-        /*[HttpPost("sendSearchQuery")]
-        public async Task<ActionResult<ServiceResponse<List<GetMediaDto>>>> GetSearchResults(SendSearchQueryDto query)
-        {
-            var serviceResponse = await _movieService.GetSearchResults(query);
-            return Ok(serviceResponse);
-        }*/
     }
 }
