@@ -19,6 +19,12 @@ namespace MovieBuff.Services.RatingService
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// This service method adds a new rating to a movie/tv show. The rating value and media id is sent
+        /// through the parameter. It also updates the average rating value of the rated media.
+        /// </summary>
+        /// <param name="newRating"></param>
+        /// <returns></returns>
         public async Task<ServiceResponse<GetRatingDto>> AddMovieRating(AddRatingDto newRating)
         {
             var response = new ServiceResponse<GetRatingDto>();

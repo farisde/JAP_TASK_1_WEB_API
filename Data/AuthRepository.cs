@@ -13,12 +13,21 @@ namespace MovieBuff.Data
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+
         public AuthRepository(DataContext context, IConfiguration configuration)
         {
             _configuration = configuration;
             _context = context;
 
         }
+
+        /// <summary>
+        /// This method logs in the user upon succesfully verifying that the given email and password value,
+        /// that is hashed, match the stored values in the db. It returns a JWT upon success.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
@@ -40,6 +49,13 @@ namespace MovieBuff.Data
             return response;
         }
 
+        /// <summary>
+        /// This method registers a new user account in the db. If the user info mathes an existing 
+        /// user, the account is not created again. This method returns the new user id upon success.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             var response = new ServiceResponse<int>();
@@ -71,6 +87,13 @@ namespace MovieBuff.Data
             return false;
         }
 
+        /// <summary>
+        /// This method creates a password hash and salt for the given password value using the
+        /// HMAC SHA512 algorithm.
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
@@ -80,6 +103,14 @@ namespace MovieBuff.Data
             }
         }
 
+        /// <summary>
+        /// This method verifies the password value sent by parameter and checks equality of hash with
+        /// existing hashes in the db.
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
+        /// <returns></returns>
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
@@ -96,6 +127,12 @@ namespace MovieBuff.Data
             }
         }
 
+        /// <summary>
+        /// This method creates a Jason Web Token with claims Naim Identifier, which represents the user id,
+        /// and Name, which represents the user's email.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private string CreateToken(User user)
         {
             var claims = new List<Claim>

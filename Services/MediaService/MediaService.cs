@@ -24,6 +24,15 @@ namespace MovieBuff.Services.MovieService
 
         }
 
+        /// <summary>
+        /// This service method returns a list of movies or tv shows from the db which you can specify
+        /// by sending the type through the parameter. The returned response is paged, and the size and
+        /// page number can be set through parameters. This method also returns filtered search results 
+        /// based on the value sent through the parameter. If that parameter is null, then this functionality
+        /// is ignored.
+        /// </summary>
+        /// <param name="paginationQuery"></param>
+        /// <returns></returns>
         public async Task<PagedResponse<List<GetMediaDto>>> GetMedia(PaginationQuery paginationQuery = null)
         {
             var response = new PagedResponse<List<GetMediaDto>>();
@@ -67,6 +76,12 @@ namespace MovieBuff.Services.MovieService
             return response;
         }
 
+        /// <summary>
+        /// This service method returns detailed info for a movie/tv show from the db
+        /// which you specify by passing the id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ServiceResponse<GetMediaDto>> GetMedia(int id)
         {
             var response = new ServiceResponse<GetMediaDto>();
@@ -77,6 +92,14 @@ namespace MovieBuff.Services.MovieService
             return response;
         }
 
+        /// <summary>
+        /// This helper method filters movies/tv shows based on the value of the search query passed
+        /// by parameter. It can filter based on any movie/tv show textual attribute. It also works
+        /// with special phrases such as: "5 stars", "at least 3 stars", "after 2015", "older than 5 years".
+        /// </summary>
+        /// <param name="dbMovies"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         private IQueryable<Media> FilterSearchResults(IQueryable<Media> dbMovies, PaginationQuery query)
         {
             var targetValue = GetNumberFromString(query.SearchPhrase);

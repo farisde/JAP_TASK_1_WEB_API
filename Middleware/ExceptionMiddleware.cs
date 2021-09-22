@@ -3,8 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MovieBuff.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,11 +15,10 @@ namespace MovieBuff.Middleware
         private readonly ILogger<ExceptionMiddleware> _logger;
         private readonly IHostEnvironment _env;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
             _next = next;
             _logger = logger;
-            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -32,11 +29,7 @@ namespace MovieBuff.Middleware
             }
             catch (Exception ex)
             {
-                if (_env.IsDevelopment())
-                {
-                    _logger.LogError(ex, ex.Message);
-                }
-
+                _logger.LogError(ex, ex.Message);
                 await HandleExceptionAsync(context, (int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
