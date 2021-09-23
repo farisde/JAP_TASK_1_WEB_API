@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using MovieBuff.Core.Services.MediaService;
 using MovieBuff.DTOs.Movie;
 using MovieBuff.Models;
 using MovieBuff.Queries;
-using MovieBuff.Services.MovieService;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MovieBuff.Controllers

@@ -1,6 +1,6 @@
-﻿using MovieBuff.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MovieBuff.Data;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

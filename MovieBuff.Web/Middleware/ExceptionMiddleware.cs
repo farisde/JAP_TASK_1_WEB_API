@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MovieBuff.Core.Services.LoggingService;
 using MovieBuff.Models;
 using System;
 using System.Net;
@@ -13,12 +13,13 @@ namespace MovieBuff.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
-        private readonly IHostEnvironment _env;
+        private readonly ILoggingManager _loggingManager;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, ILoggingManager loggingManager)
         {
             _next = next;
             _logger = logger;
+            _loggingManager = loggingManager;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -29,6 +30,7 @@ namespace MovieBuff.Middleware
             }
             catch (Exception ex)
             {
+                _loggingManager.LogInfo(ex.Message);
                 _logger.LogError(ex, ex.Message);
                 await HandleExceptionAsync(context, (int)HttpStatusCode.InternalServerError, ex.Message);
             }

@@ -1,7 +1,7 @@
-﻿using MovieBuff.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MovieBuff.Data;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

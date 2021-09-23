@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MovieBuff.Core.Services.MediaService;
 using MovieBuff.Data;
 using MovieBuff.DTOs.Movie;
 using MovieBuff.Models;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MovieBuff.Services.MovieService
+namespace MovieBuff.Infrastructure.Services.MediaService
 {
     public class MediaService : IMediaService
     {
@@ -44,6 +45,7 @@ namespace MovieBuff.Services.MovieService
             {
                 paginationQuery = new PaginationQuery();
             }
+
             if (paginationQuery.SearchPhrase == null)
             {
                 dbMovies = dbMovies.Where(m => m.MediaType == paginationQuery.MediaType);
